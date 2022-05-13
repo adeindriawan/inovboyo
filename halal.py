@@ -11,7 +11,7 @@ from streamlit_folium import st_folium
 
 @st.cache
 def get_data():
-    return pd.read_csv("data.csv" ,sep='\t')
+		return pd.read_csv("data.csv" ,sep='\t')
 
 def split_query(q):
 	qlist=q.lower().split()
@@ -43,21 +43,18 @@ def get_response(q):
 	idx=(-similarity).argsort()[:numsort]
 	data = []
 	for y in idx:
-    		data.append([mask['produk'][y], mask['perusahaan'][y], mask['sertifikat'][y],mask['tanggal'][y]])
+				data.append([mask['produk'][y], mask['perusahaan'][y], mask['sertifikat'][y],mask['tanggal'][y]])
 	
 	return(data)
 
 def get_coordinates():
-	botsol_data = pd.read_csv('botsolready.csv')
-	coordinates = []
-	for index, row in botsol_data.iterrows():
-		coordinates.append([row['Latitude'], row['Longitude']])
+	botsol_data = pd.read_csv('botsolready.csv'))
 
 	mapit = folium.Map(location=[-7.277674, 112.7685506], zoom_start=6)
-	for coord in coordinates:
-		folium.Marker(location=[coord[0], coord[1]]).add_to(mapit)
+	for index, row in botsol_data.iterrows():
+		folium.Marker(location=[row['Latitude'], row['Longitude']], popup=row['Name'], tooltip=row['Name']).add_to(mapit)
 	return mapit
-    	
+			
 st.title("Assalamu 'alaikum di Open Data Halal :)")
 
 cari = st.text_input("Cari Produk/Restaurant Halal", "rawon surabaya")
