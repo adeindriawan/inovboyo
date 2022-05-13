@@ -45,6 +45,10 @@ def get_response(q):
     		data.append([mask['produk'][y], mask['perusahaan'][y], mask['sertifikat'][y],mask['tanggal'][y]])
 	
 	return(data)
+
+def get_coordinates():
+	botsol_data = pd.read_csv('botsolready.csv')
+	return botsol_data
     	
 st.title("Assalamu 'alaikum di Open Data Halal :)")
 
@@ -71,6 +75,8 @@ st.image("produk.png", width=None)
 st.header("Nama Perusahaan tersertifikasi Halal di LPPOM MUI")
 values = st.slider("Jumlah Perusahaan", 5, 20, step=5)
 st.table(datahalal.groupby(["perusahaan"]).count().sort_values("produk",ascending=False).head(values))
+
+st.table(get_coordinates())
 
 st.header("UMKM Binaan Pusat Kajian Halal ITS")
 st.markdown("Kunjungi binaan halal ITS [disini](http://halal.its.ac.id/binaan) ")
