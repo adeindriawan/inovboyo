@@ -2,11 +2,12 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import matplotlib.pyplot as plt
-
 import re
 import string
 import requests
 from sklearn.feature_extraction.text import TfidfVectorizer
+import folium
+from streamlit_folium import st_folium
 
 @st.cache
 def get_data():
@@ -48,7 +49,14 @@ def get_response(q):
 
 def get_coordinates():
 	botsol_data = pd.read_csv('botsolready.csv')
-	return botsol_data
+	coordinates = []
+	for index, row in botsol_data.iterrows():
+		coordinates.append([row['Latitude'], row['Longitude']])
+
+	mapit = folium.Map(location=[-7.277674, 112.7685506], zoom_start=6)
+	for coord in coordinates:
+		folium.Marker(location=[coord[0], coord[1]]).add_to(mapit)
+	return mapit
     	
 st.title("Assalamu 'alaikum di Open Data Halal :)")
 
@@ -76,7 +84,7 @@ st.header("Nama Perusahaan tersertifikasi Halal di LPPOM MUI")
 values = st.slider("Jumlah Perusahaan", 5, 20, step=5)
 st.table(datahalal.groupby(["perusahaan"]).count().sort_values("produk",ascending=False).head(values))
 
-st.table(get_coordinates())
+st_data = st_folium(get_coordinates(), width = 725)
 
 st.header("UMKM Binaan Pusat Kajian Halal ITS")
 st.markdown("Kunjungi binaan halal ITS [disini](http://halal.its.ac.id/binaan) ")
