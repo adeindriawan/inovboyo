@@ -48,7 +48,7 @@ def get_response(q):
 	return(data)
 
 def get_coordinates():
-	botsol_data = pd.read_csv('botsolready.csv'))
+	botsol_data = pd.read_csv('botsolready.csv')
 
 	mapit = folium.Map(location=[-7.277674, 112.7685506], zoom_start=6)
 	for index, row in botsol_data.iterrows():
