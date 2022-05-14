@@ -1,17 +1,18 @@
 import streamlit as st
 import pandas as pd
 import numpy as np
-import matplotlib.pyplot as plt
+import plotly.express as px
 import re
 import string
 import requests
-from sklearn.feature_extraction.text import TfidfVectorizer
 import folium
 from streamlit_folium import st_folium
 
 @st.cache
 def get_data():
 		return pd.read_csv("data.csv" ,sep='\t')
+def get_databotsol():
+	return pd.read_csv("botsolready.csv")
 
 def split_query(q):
 	qlist=q.lower().split()
@@ -24,7 +25,7 @@ def jaccard_similarity(list1, list2):
 	return float(len(s1.intersection(s2)) / len(s1.union(s2)))
 
 datahalal=get_data()
-
+databotsol = get_databotsol()
 
 def get_response(q):
 	query=split_query(q)
@@ -48,7 +49,7 @@ def get_response(q):
 	return(data)
 
 def get_coordinates():
-	botsol_data = pd.read_csv('botsolready.csv')
+	botsol_data = get_databotsol()
 
 	mapit = folium.Map(location=[-7.277674, 112.7685506], zoom_start=6)
 	for index, row in botsol_data.iterrows():
@@ -57,6 +58,7 @@ def get_coordinates():
 			
 st.title("Assalamu 'alaikum di Open Data Halal :)")
 
+# search restoran halal
 cari = st.text_input("Cari Produk/Restaurant Halal", "rawon surabaya")
 cariflag=False  
 mydata =[]
@@ -73,16 +75,47 @@ if(st.button('Submit')):
 
 st.title("Fun Facts about Produk Halal di Indonesia")
 
-
+# wordcloud restoran halal
 st.header("WordCloud Nama Produk tersertifikasi Halal di LPPOM MUI")
 st.image("produk.png", width=None)
 
+# slider tabel restoran halal
 st.header("Nama Perusahaan tersertifikasi Halal di LPPOM MUI")
 values = st.slider("Jumlah Perusahaan", 5, 20, step=5)
 st.table(datahalal.groupby(["perusahaan"]).count().sort_values("produk",ascending=False).head(values))
 
+# peta folium restoran
 st_data = st_folium(get_coordinates(), width = 725)
 
+# selectbox tabel restoran tiap kecamatan
+st.header("Data Restoran tiap Kecamatan")
+select = st.selectbox('Pilih Kecamatan',databotsol['Kecamatan'].unique())
+kec = databotsol[databotsol['Kecamatan'] == select][['Name','Address','Rating']]
+st.table(kec)
+
+# bar plot kecamatan
+st.header("Barplot Jumlah Restoran tiap Kecamatan")
+kec2 = databotsol[['Name','Kecamatan']].groupby("Kecamatan").count().reset_index().sort_values(by=['Name'],ascending=True)
+kec2.rename(columns = {'Name':'Jumlah'}, inplace = True)
+figkec = px.bar(kec2, x='Jumlah', y='Kecamatan',orientation='h')
+figkec.update_layout(
+    width=900,
+    height=1200
+)
+st.plotly_chart(figkec)
+
+# bar plot kategori
+st.header("Barplot Jumlah Restoran per Kategori")
+kateg = databotsol[['Name','kategori']].groupby("kategori").count().reset_index().sort_values(by=['Name'],ascending=True)
+kateg.rename(columns = {'Name':'Jumlah','kategori':'Kategori'}, inplace = True)
+figkateg = px.bar(kateg, x='Kategori', y='Jumlah')
+figkateg.update_layout(
+    width=500,
+    height=450,
+)
+st.plotly_chart(figkateg)
+
+# FOOTER
 st.header("UMKM Binaan Pusat Kajian Halal ITS")
 st.markdown("Kunjungi binaan halal ITS [disini](http://halal.its.ac.id/binaan) ")
 
