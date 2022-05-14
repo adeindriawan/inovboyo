@@ -56,6 +56,7 @@ pandocfilters==1.5.0
 parso==0.8.3
 pickleshare==0.7.5
 Pillow==9.1.0
+plotly==5.8.0
 prometheus-client==0.14.1
 prompt-toolkit==3.0.29
 protobuf==3.20.1
@@ -71,6 +72,8 @@ pyrsistent==0.18.1
 python-dateutil==2.8.2
 pytz==2022.1
 pytz-deprecation-shim==0.1.0.post0
+pywin32==304
+pywinpty==2.0.5
 pyzmq==22.3.0
 requests==2.26.0
 scikit-learn==1.0.2
@@ -84,6 +87,7 @@ soupsieve==2.3.2.post1
 stack-data==0.2.0
 streamlit==1.9.0
 streamlit-folium==0.6.9
+tenacity==8.0.1
 terminado==0.13.3
 threadpoolctl==3.1.0
 tinycss2==1.1.1
