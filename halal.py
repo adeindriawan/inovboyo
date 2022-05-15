@@ -56,7 +56,7 @@ def get_coordinates():
 		folium.Marker(location=[row['Latitude'], row['Longitude']], popup=row['Name'], tooltip=row['Name']).add_to(mapit)
 	return mapit
 			
-st.title("Assalamu 'alaikum di Open Data Halal :)")
+st.title("Surabaya Halal Directory")
 
 # search restoran halal
 cari = st.text_input("Cari Produk/Restaurant Halal", "rawon surabaya")
