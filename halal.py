@@ -97,9 +97,10 @@ with col1:
     st.header("Data Restoran tiap Kecamatan")
     restokec = st.slider("Jumlah Restoran", 5, 20, step=5)
     select = st.selectbox('Pilih Kecamatan',databotsol['Kecamatan'].unique())
+    urut = st.selectbox('Diurutkan berdasarkan',('Rating','Reviews'))
 
 with col2:
-    kec = databotsol[databotsol['Kecamatan'] == select][['Name','Address','Rating']].sort_values("Rating",ascending=False).head(restokec)
+    kec = databotsol[databotsol['Kecamatan'] == select][['Name','Address','Rating','Reviews']].sort_values(urut,ascending=False).head(restokec)
     st.table(kec)
 
 # bar plot kecamatan
