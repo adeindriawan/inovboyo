@@ -91,11 +91,16 @@ if(st.button('Submit')):
 
 
 # selectbox tabel restoran tiap kecamatan
-st.header("Data Restoran tiap Kecamatan")
-restokec = st.slider("Jumlah Restoran", 5, 20, step=5)
-select = st.selectbox('Pilih Kecamatan',databotsol['Kecamatan'].unique())
-kec = databotsol[databotsol['Kecamatan'] == select][['Name','Address','Rating']].sort_values("Rating",ascending=False).head(restokec)
-st.table(kec)
+col1, col2 = st.columns(2)
+
+with col1:
+    st.header("Data Restoran tiap Kecamatan")
+    restokec = st.slider("Jumlah Restoran", 5, 20, step=5)
+    select = st.selectbox('Pilih Kecamatan',databotsol['Kecamatan'].unique())
+
+with col2:
+    kec = databotsol[databotsol['Kecamatan'] == select][['Name','Address','Rating']].sort_values("Rating",ascending=False).head(restokec)
+    st.table(kec)
 
 # bar plot kecamatan
 st.header("Barplot Jumlah Restoran tiap Kecamatan")
