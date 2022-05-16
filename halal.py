@@ -8,6 +8,8 @@ import requests
 import folium
 from streamlit_folium import st_folium
 
+st.set_page_config(layout="wide")
+
 @st.cache
 def get_data():
 		return pd.read_csv("data.csv" ,sep='\t')
@@ -48,18 +50,32 @@ def get_response(q):
 	
 	return(data)
 
-def get_coordinates():
-	botsol_data = get_databotsol()
+def get_coordinates(opsi):
+	#botsol_data = get_databotsol()
 
-	mapit = folium.Map(location=[-7.277674, 112.7685506], zoom_start=6)
-	for index, row in botsol_data.iterrows():
+	mapit = folium.Map(location=[-7.277674, 112.694906], zoom_start=12)
+	for index, row in databotsol.iterrows():
 		folium.Marker(location=[row['Latitude'], row['Longitude']], popup=row['Name'], tooltip=row['Name']).add_to(mapit)
 	return mapit
+	
+
 			
 st.title("Surabaya Halal Directory")
 
 # search restoran halal
-cari = st.text_input("Cari Produk/Restaurant Halal", "rawon surabaya")
+
+
+st.title("Peta Restoran dan Warung Di Surabaya")
+
+select_data = st.radio(
+    "Pilih Data yang ingin ditampilkan",
+    ("Semua", "Halal","BelumHalal")
+)
+
+# peta folium restoran
+st_data = st_folium(get_coordinates(select_data), width = 825)
+
+cari = st.text_input("Cari Produk/Restaurant Halal di Jawa Timur", "kopi susu")
 cariflag=False  
 mydata =[]
 if(st.button('Submit')):
@@ -73,19 +89,6 @@ if(st.button('Submit')):
 	else:
 		st.error("Masukkan input ya")
 
-st.title("Fun Facts about Produk Halal di Indonesia")
-
-# wordcloud restoran halal
-st.header("WordCloud Nama Produk tersertifikasi Halal di LPPOM MUI")
-st.image("produk.png", width=None)
-
-# slider tabel restoran halal
-st.header("Nama Perusahaan tersertifikasi Halal di LPPOM MUI")
-values = st.slider("Jumlah Perusahaan", 5, 20, step=5)
-st.table(datahalal.groupby(["perusahaan"]).count().sort_values("produk",ascending=False).head(values))
-
-# peta folium restoran
-st_data = st_folium(get_coordinates(), width = 725)
 
 # selectbox tabel restoran tiap kecamatan
 st.header("Data Restoran tiap Kecamatan")
