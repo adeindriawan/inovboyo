@@ -16,8 +16,9 @@ st.set_page_config(layout="wide")
 @st.cache
 def get_data():
 		return pd.read_csv("data.csv" ,sep='\t')
+
 def get_databotsol():
-	return pd.read_csv("botsolready.csv")
+	return pd.read_csv("botsolxhalaladded.csv")
 
 def split_query(q):
 	qlist=q.lower().split()

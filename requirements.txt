@@ -31,6 +31,7 @@ ipykernel==6.13.0
 ipython==8.3.0
 ipython-genutils==0.2.0
 ipywidgets==7.7.0
+isodate==0.6.1
 jedi==0.18.1
 Jinja2==3.1.2
 joblib==1.1.0
@@ -48,6 +49,7 @@ nbclient==0.6.3
 nbconvert==6.5.0
 nbformat==5.4.0
 nest-asyncio==1.5.5
+networkx==2.8
 notebook==6.4.11
 numpy==1.21.6
 packaging==21.3
@@ -73,6 +75,7 @@ python-dateutil==2.8.2
 pytz==2022.1
 pytz-deprecation-shim==0.1.0.post0
 pyzmq==22.3.0
+rdflib==6.1.1
 requests==2.26.0
 scikit-learn==1.0.2
 scipy==1.8.0
@@ -84,6 +87,7 @@ smmap==5.0.0
 soupsieve==2.3.2.post1
 stack-data==0.2.0
 streamlit==1.9.0
+streamlit-agraph==0.0.37
 streamlit-folium==0.6.9
 tenacity==8.0.1
 terminado==0.13.3
@@ -102,4 +106,5 @@ watchdog==2.1.7
 wcwidth==0.2.5
 webencodings==0.5.1
 widgetsnbextension==3.6.0
+wordcloud==1.8.1
 zipp==3.8.0
