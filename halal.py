@@ -6,6 +6,7 @@ import re
 import string
 import requests
 import folium
+from streamlit_agraph import agraph, Node, Edge, Config
 from streamlit_folium import st_folium
 
 st.set_page_config(layout="wide")
@@ -115,15 +116,36 @@ figkec.update_layout(
 st.plotly_chart(figkec)
 
 # bar plot kategori
-st.header("Barplot Jumlah Restoran per Kategori")
-kateg = databotsol[['Name','kategori']].groupby("kategori").count().reset_index().sort_values(by=['Name'],ascending=True)
-kateg.rename(columns = {'Name':'Jumlah','kategori':'Kategori'}, inplace = True)
-figkateg = px.bar(kateg, x='Kategori', y='Jumlah')
-figkateg.update_layout(
-    width=500,
-    height=450,
+
+col3, col4 = st.columns(2)
+
+with col3:
+    st.header("Barplot Jumlah Restoran per Kategori")
+    selectkeckategori = st.selectbox('Pilih Kecamatan ',databotsol['Kecamatan'].unique())
+
+with col4:
+    kateg = databotsol[['Name','kategori']].groupby("kategori").count().reset_index().sort_values(by=['Name'],ascending=True)
+    kateg.rename(columns = {'Name':'Jumlah','kategori':'Kategori'}, inplace = True)
+    figkateg = px.bar(kateg, x='Kategori', y='Jumlah')
+    figkateg.update_layout(
+    width=600,
+    height=550,
 )
-st.plotly_chart(figkateg)
+    st.plotly_chart(figkateg)
+
+st.header("Wordcloud Kuliner Surabaya")
+
+st.header("Cabang Restoran di Surabaya")
+config = Config(height=600, width=700, nodeHighlightBehavior=True, highlightColor="#F7A7A6", directed=True,
+                  collapsible=True)
+
+nodes = []
+edges = []
+nodes.append(Node(id="Spiderman", size=400, svg="http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_spiderman.png") )
+nodes.append( Node(id="Captain_Marvel", size=400, svg="http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_captainmarvel.png") )
+edges.append( Edge(source="Captain_Marvel", target="Spiderman", type="CURVE_SMOOTH"))
+agraph(nodes, edges, config)
+
 
 # FOOTER
 st.header("UMKM Binaan Pusat Kajian Halal ITS")
