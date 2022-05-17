@@ -8,6 +8,8 @@ import requests
 import folium
 from streamlit_agraph import agraph, Node, Edge, Config
 from streamlit_folium import st_folium
+from wordcloud import WordCloud
+import matplotlib.pyplot as plt
 
 st.set_page_config(layout="wide")
 
@@ -116,24 +118,56 @@ figkec.update_layout(
 st.plotly_chart(figkec)
 
 # bar plot kategori
-
+listkec = databotsol['Kecamatan'].unique()
+listkec=np.insert(listkec, 0, 'All', axis=0)
+selectkeckategori = st.selectbox('Pilih Kecamatan ',listkec)
+if(selectkeckategori=='All'):
+	datafilter = databotsol.copy()
+else:
+	datafilter = databotsol[databotsol['Kecamatan']==selectkeckategori]
 col3, col4 = st.columns(2)
-
 with col3:
-    st.header("Barplot Jumlah Restoran per Kategori")
-    selectkeckategori = st.selectbox('Pilih Kecamatan ',databotsol['Kecamatan'].unique())
+	st.header("Barplot Jumlah Restoran per Kategori")
+	kateg = datafilter[['Name','kategori']].groupby("kategori").count().reset_index().sort_values(by=['Name'],ascending=True)
+	kateg.rename(columns = {'Name':'Jumlah','kategori':'Kategori'}, inplace = True)
+	figkateg = px.bar(kateg, x='Kategori', y='Jumlah')
+	figkateg.update_layout(
+		width=600,
+		height=550,
+	)
+	st.plotly_chart(figkateg)
 
 with col4:
-    kateg = databotsol[['Name','kategori']].groupby("kategori").count().reset_index().sort_values(by=['Name'],ascending=True)
-    kateg.rename(columns = {'Name':'Jumlah','kategori':'Kategori'}, inplace = True)
-    figkateg = px.bar(kateg, x='Kategori', y='Jumlah')
-    figkateg.update_layout(
-    width=600,
-    height=550,
-)
-    st.plotly_chart(figkateg)
+	st.header("Wordcloud Kuliner Surabaya")
+	dfkeccopy = datafilter.copy()
+	dfkeccopy['Name'] = dfkeccopy['Name'].str.lower()
+	dfkeccopy['Name'] = dfkeccopy['Name'].str.replace(r'[^\w\s]'," ")
+	dfkeccopy['Name'] = dfkeccopy['Name'].str.strip()
+	dfkeccopy.Name = dfkeccopy.Name.replace(r'\s+', ' ', regex=True)
+	listname = dfkeccopy['Name']
+	stop = ['warung', 'bakery', 'cafe', 'surabaya', 'kopi', 'warkop', 'restaurant', 'coffee']
+	pat = r'\b(?:{})\b'.format('|'.join(stop))  #joining all words in one line separated by |
+	listnamestop = listname.str.replace(pat, '')  # replace stopword
+	listnamestop = listnamestop.str.replace(r'\s+', ' ')  #space tidying
 
-st.header("Wordcloud Kuliner Surabaya")
+	comment_words = ''
+	for val in listnamestop:
+		val = str(val)
+		tokens = val.split()
+		for i in range(len(tokens)):
+			tokens[i] = tokens[i].lower()
+		comment_words += " ".join(tokens)+" "
+	wordcloud = WordCloud(width = 800, height = 800,
+					background_color ='white',
+					min_font_size = 10).generate(comment_words)
+	fig, ax = plt.subplots(figsize = (12, 8))
+	ax.imshow(wordcloud)
+	plt.axis('off')
+	plt.tight_layout(pad = 0)
+	plt.show()
+	st.pyplot(fig)
+
+
 
 st.header("Cabang Restoran di Surabaya")
 config = Config(height=600, width=700, nodeHighlightBehavior=True, highlightColor="#F7A7A6", directed=True,
