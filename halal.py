@@ -65,9 +65,10 @@ def get_coordinates(opsi):
 
 			
 st.title("Surabaya Halal Directory")
+st.write('Halo Arek Suroboyo? Apakah anda pecinta kuliner? Pernahkah anda berfikir kuliner yang disajikan sudah tersertifikasi halal? Sebagai seorang muslim memang suatu kebutuhan dan diwajibkan memakanan makanan dan minuman halal, baik dari bahan dan cara pengolahannya. Kalau anda penasaran kuliner yang biasanya anda makan halal atau tidak. Aplikasi ini membantu mengecek sertifikasi halal warung/restaurant/warung/bakery dan kuliner lainnya di Kota Surabaya. Aplikasi ini menggabungkan data google maps dan data SIHALAL BPJH menggunakan algoritma Jaccard Similarity.')
+st.write('Anda dapat menemukan source dan dataset disini(https: // github.com/adeindriawan/inovboyo)')
 
 # search restoran halal
-
 
 st.title("Peta Restoran dan Warung Di Surabaya")
 
