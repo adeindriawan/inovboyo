@@ -74,7 +74,7 @@ st.title("Peta Restoran dan Warung Di Surabaya")
 
 select_data = st.radio(
     "Pilih Data yang ingin ditampilkan",
-    ("Semua", "Halal","BelumHalal")
+    ("Semua", "Tersertifikasi Halal","Belum Tersertifikasi Halal")
 )
 
 # peta folium restoran
