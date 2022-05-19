@@ -80,7 +80,8 @@ select_data = st.radio(
 # peta folium restoran
 st_data = st_folium(get_coordinates(select_data), width = 825)
 
-cari = st.text_input("Cari Produk/Restaurant Halal di Jawa Timur", "kopi susu")
+st.header("Cari Produk/Restaurant Halal di Jawa Timur")
+cari = st.text_input("Data diperoleh dari Sihalal http://info.halal.go.id/cari/", "kopi susu")
 cariflag=False  
 mydata =[]
 if(st.button('Submit')):
