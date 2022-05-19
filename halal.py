@@ -30,7 +30,7 @@ def jaccard_similarity(list1, list2):
 	s2 = set(list2)
 	return float(len(s1.intersection(s2)) / len(s1.union(s2)))
 
-datahalal=get_data()
+datahalal = get_data()
 databotsol = get_databotsol()
 
 def get_response(q):
@@ -56,14 +56,18 @@ def get_response(q):
 
 def get_coordinates(opsi):
 	#botsol_data = get_databotsol()
-
+	print(opsi)
+	if opsi == 'Tersertifikasi Halal':
+		data = databotsol.loc[~databotsol['No Sertifikat'].isnull()]
+	elif opsi == 'Belum Tersertifikasi Halal':
+		data = databotsol.loc[databotsol['No Sertifikat'].isnull()]
+	else:
+		data = databotsol
 	mapit = folium.Map(location=[-7.277674, 112.694906], zoom_start=12)
-	for index, row in databotsol.iterrows():
+	for index, row in data.iterrows():
 		folium.Marker(location=[row['Latitude'], row['Longitude']], popup=row['Name'], tooltip=row['Name']).add_to(mapit)
 	return mapit
-	
-
-			
+		
 st.title("Surabaya Halal Directory")
 st.write('Halo Arek Suroboyo? Apakah anda pecinta kuliner? Pernahkah anda berfikir kuliner yang disajikan sudah tersertifikasi halal? Sebagai seorang muslim memang suatu kebutuhan dan diwajibkan memakanan makanan dan minuman halal, baik dari bahan dan cara pengolahannya. Kalau anda penasaran kuliner yang biasanya anda makan halal atau tidak. Aplikasi ini membantu mengecek sertifikasi halal warung/restaurant/warung/bakery dan kuliner lainnya di Kota Surabaya. Aplikasi ini menggabungkan data google maps dan data SIHALAL BPJPH menggunakan algoritma Jaccard Similarity.')
 st.write('Anda dapat melihat source code dan dataset [di sini](https://github.com/adeindriawan/inovboyo)')
@@ -76,6 +80,7 @@ select_data = st.radio(
     "Pilih Data yang ingin ditampilkan",
     ("Semua", "Tersertifikasi Halal","Belum Tersertifikasi Halal")
 )
+st.write('Lokasi usaha makanan/minuman yang: '+ select_data)
 
 # peta folium restoran
 st_data = st_folium(get_coordinates(select_data), width = 825)
@@ -94,7 +99,6 @@ if(st.button('Submit')):
 		cariflag=True
 	else:
 		st.error("Masukkan input ya")
-
 
 # selectbox tabel restoran tiap kecamatan
 col1, col2 = st.columns(2)
@@ -170,8 +174,6 @@ with col4:
 	plt.show()
 	st.pyplot(fig)
 
-
-
 st.header("Cabang Restoran di Surabaya")
 config = Config(height=600, width=700, nodeHighlightBehavior=True, highlightColor="#F7A7A6", directed=True,
                   collapsible=True)
@@ -182,7 +184,6 @@ nodes.append(Node(id="Spiderman", size=400, svg="http://marvel-force-chart.surge
 nodes.append( Node(id="Captain_Marvel", size=400, svg="http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_captainmarvel.png") )
 edges.append( Edge(source="Captain_Marvel", target="Spiderman", type="CURVE_SMOOTH"))
 agraph(nodes, edges, config)
-
 
 # FOOTER
 st.header("UMKM Binaan Pusat Kajian Halal ITS")
