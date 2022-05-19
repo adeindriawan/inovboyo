@@ -57,15 +57,40 @@ def get_response(q):
 def get_coordinates(opsi):
 	#botsol_data = get_databotsol()
 	print(opsi)
-	if opsi == 'Tersertifikasi Halal':
-		data = databotsol.loc[~databotsol['No Sertifikat'].isnull()]
-	elif opsi == 'Belum Tersertifikasi Halal':
-		data = databotsol.loc[databotsol['No Sertifikat'].isnull()]
-	else:
-		data = databotsol
+	certified = databotsol.loc[~databotsol['No Sertifikat'].isnull()]
+	uncertified = databotsol.loc[databotsol['No Sertifikat'].isnull()]
 	mapit = folium.Map(location=[-7.277674, 112.694906], zoom_start=12)
-	for index, row in data.iterrows():
-		folium.Marker(location=[row['Latitude'], row['Longitude']], popup=row['Name'], tooltip=row['Name']).add_to(mapit)
+	if opsi == 'Tersertifikasi Halal':
+		for index, row in certified.iterrows():
+			folium.Marker(
+				location=[row['Latitude'], row['Longitude']],
+				popup=row['Name'],
+				tooltip=row['Name'],
+				icon=folium.Icon(color="green")
+				).add_to(mapit)
+	elif opsi == 'Belum Tersertifikasi Halal':
+		for index, row in uncertified.iterrows():
+			folium.Marker(
+				location=[row['Latitude'], row['Longitude']],
+				popup=row['Name'],
+				tooltip=row['Name'],
+				icon=folium.Icon(color="red")
+				).add_to(mapit)
+	else:
+		for index, row in certified.iterrows():
+			folium.Marker(
+				location=[row['Latitude'], row['Longitude']],
+				popup=row['Name'],
+				tooltip=row['Name'],
+				icon=folium.Icon(color="green")
+				).add_to(mapit)
+		for index, row in uncertified.iterrows():
+			folium.Marker(
+				location=[row['Latitude'], row['Longitude']],
+				popup=row['Name'],
+				tooltip=row['Name'],
+				icon=folium.Icon(color="red")
+				).add_to(mapit)
 	return mapit
 		
 st.title("Surabaya Halal Directory")
