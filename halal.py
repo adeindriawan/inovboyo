@@ -127,7 +127,8 @@ if(st.button('Submit')):
 
 # selectbox tabel restoran tiap kecamatan
 col1, col2 = st.columns(2)
-
+# cast Reviews value to float
+databotsol['Reviews'] = databotsol['Reviews'].str.replace(',', '').astype(float)
 with col1:
     st.header("Data Restoran tiap Kecamatan")
     restokec = st.slider("Jumlah Restoran", 5, 20, step=5)
@@ -136,7 +137,7 @@ with col1:
 
 with col2:
     kec = databotsol[databotsol['Kecamatan'] == select][['Name','Address','Rating','Reviews']].sort_values(urut,ascending=False).head(restokec)
-    st.table(kec)
+    st.table(kec.style.format({'Rating': '{:.1f}', 'Reviews': '{:.0f}'}))
 
 # bar plot kecamatan
 st.header("Barplot Jumlah Restoran tiap Kecamatan")
