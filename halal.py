@@ -201,14 +201,26 @@ with col4:
 	st.pyplot(fig)
 
 st.header("Cabang Restoran di Surabaya")
-config = Config(height=600, width=700, nodeHighlightBehavior=True, highlightColor="#F7A7A6", directed=True,
+config = Config(height=600, width=1400, nodeHighlightBehavior=True, highlightColor="#F7A7A6", directed=True,
                   collapsible=True)
+
+def get_datagraph():
+	return pd.read_csv("graphnode.csv")
+
+graphdf = get_datagraph()
+graphdfsmall = graphdf[graphdf['jac']>=0.5]
+listgrapha = graphdfsmall['Name-a'].unique()
+listgraphb = graphdfsmall['Name-b'].unique()
+listgraph = list(set(listgrapha) | set(listgraphb))
+st.text(len(graphdfsmall))
+st.text(len(listgraph))
 
 nodes = []
 edges = []
-nodes.append(Node(id="Spiderman", size=400, svg="http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_spiderman.png") )
-nodes.append( Node(id="Captain_Marvel", size=400, svg="http://marvel-force-chart.surge.sh/marvel_force_chart_img/top_captainmarvel.png") )
-edges.append( Edge(source="Captain_Marvel", target="Spiderman", type="CURVE_SMOOTH"))
+for item in listgraph:
+    nodes.append(Node(id=item, size=400) )
+for index,row in graphdfsmall.iterrows():
+    edges.append( Edge(source=row['Name-a'], target=row['Name-b'], type="CURVE_SMOOTH"))
 agraph(nodes, edges, config)
 
 # FOOTER
