@@ -56,7 +56,7 @@ def get_response(q):
 
 def get_coordinates(opsi):
 	#botsol_data = get_databotsol()
-	print(opsi)
+	# print(opsi)
 	certified = databotsol.loc[~databotsol['No Sertifikat'].isnull()]
 	uncertified = databotsol.loc[databotsol['No Sertifikat'].isnull()]
 	mapit = folium.Map(location=[-7.277674, 112.694906], zoom_start=12)
@@ -96,7 +96,7 @@ def get_coordinates(opsi):
 st.title("Surabaya Halal Directory")
 st.write('Halo Arek Suroboyo? Apakah anda pecinta kuliner? Pernahkah anda berfikir kuliner yang disajikan sudah tersertifikasi halal? Sebagai seorang muslim memang suatu kebutuhan dan diwajibkan memakanan makanan dan minuman halal, baik dari bahan dan cara pengolahannya. Kalau anda penasaran kuliner yang biasanya anda makan halal atau tidak. Aplikasi ini membantu mengecek sertifikasi halal warung/restaurant/warung/bakery dan kuliner lainnya di Kota Surabaya. Aplikasi ini menggabungkan data google maps dan data SIHALAL BPJPH menggunakan algoritma Jaccard Similarity.')
 st.write('Anda dapat melihat source code dan dataset [di sini](https://github.com/adeindriawan/inovboyo)')
-
+st.write('Data didapatkan dengan melakukan crawling data Google Maps restoran di Surabaya. Data dilakukan cleaning terlebih dahulu dan jumlah data yang siap digunakan sebanyak 1339 restoran di seluruh 62 kecamatan surabaya. Restoran restoran tersebut dikategorikan ke dalam 6 kategori berdasarkan keyword yang digunakan pada saat crawling: Cafe, Restoran, Warung, Bakery, Warung kopi, dan Kopi.')
 # search restoran halal
 
 st.title("Peta Restoran dan Warung Di Surabaya")
@@ -161,6 +161,7 @@ else:
 col3, col4 = st.columns(2)
 with col3:
 	st.header("Barplot Jumlah Restoran per Kategori")
+	st.text(f"Kecamatan : {selectkeckategori}")
 	kateg = datafilter[['Name','kategori']].groupby("kategori").count().reset_index().sort_values(by=['Name'],ascending=True)
 	kateg.rename(columns = {'Name':'Jumlah','kategori':'Kategori'}, inplace = True)
 	figkateg = px.bar(kateg, x='Kategori', y='Jumlah')
@@ -172,6 +173,7 @@ with col3:
 
 with col4:
 	st.header("Wordcloud Kuliner Surabaya")
+	st.text(f"Kecamatan : {selectkeckategori}")
 	dfkeccopy = datafilter.copy()
 	dfkeccopy['Name'] = dfkeccopy['Name'].str.lower()
 	dfkeccopy['Name'] = dfkeccopy['Name'].str.replace(r'[^\w\s]'," ")
@@ -200,7 +202,7 @@ with col4:
 	plt.show()
 	st.pyplot(fig)
 
-st.header("Cabang Restoran di Surabaya")
+st.header("Visualisasi Graph Restoran di Surabaya")
 config = Config(height=600, width=1400, nodeHighlightBehavior=True, highlightColor="#F7A7A6", directed=True,
                   collapsible=True)
 
@@ -212,8 +214,6 @@ graphdfsmall = graphdf[graphdf['jac']>=0.5]
 listgrapha = graphdfsmall['Name-a'].unique()
 listgraphb = graphdfsmall['Name-b'].unique()
 listgraph = list(set(listgrapha) | set(listgraphb))
-st.text(len(graphdfsmall))
-st.text(len(listgraph))
 
 nodes = []
 edges = []
