@@ -92,7 +92,7 @@ def get_coordinates(opsi):
 				icon=folium.Icon(color="red")
 				).add_to(mapit)
 	return mapit
-		
+
 st.title("Surabaya Halal Directory")
 st.write('Halo Arek Suroboyo? Apakah anda pecinta kuliner? Pernahkah anda berfikir kuliner yang disajikan sudah tersertifikasi halal? Sebagai seorang muslim memang suatu kebutuhan dan diwajibkan memakanan makanan dan minuman halal, baik dari bahan dan cara pengolahannya. Kalau anda penasaran kuliner yang biasanya anda makan halal atau tidak. Aplikasi ini membantu mengecek sertifikasi halal warung/restaurant/warung/bakery dan kuliner lainnya di Kota Surabaya. Aplikasi ini menggabungkan data google maps dan data SIHALAL BPJPH menggunakan algoritma Jaccard Similarity.')
 st.write('Anda dapat melihat source code dan dataset [di sini](https://github.com/adeindriawan/inovboyo)')
@@ -224,17 +224,18 @@ for index,row in graphdfsmall.iterrows():
 agraph(nodes, edges, config)
 
 # FOOTER
-st.header("UMKM Binaan Pusat Kajian Halal ITS")
-st.markdown("Kunjungi binaan halal ITS [disini](http://halal.its.ac.id/binaan) ")
-
-st.header("Linked Open Data Halal")
-st.markdown("Kunjungi Linked Open Data Halal ITS [disini](http://halal.addi.is.its.ac.id) ")
-
-st.markdown("---")
-st.markdown("**Awards**")
-st.markdown("- [Best Graphistry app at Tigergraph Hackathon 2021](https://devpost.com/software/halal-food)")
-st.markdown("- [Neo4J Graphie Award Winner 2020](https://neo4j.com/graphies/#panel1)")
-st.markdown("- Best Paper at International Conference on Halal Innovation in Products and Services 2018")
 
 st.header("Dipersembahkan oleh")
-st.image("logo.png")
+st.image("logo.png",width=400)
+
+st.markdown("***")
+col5, col6, col7 = st.columns([3,1,3])
+with col5:
+    st.write(' ')
+with col6:
+	st.image(["logosby.png","inovboyo.png"])
+with col7:
+	st.write(' ')
+st.markdown("<h1 style='text-align: center'>INOVBOYO - Lomba Inovasi Kota Surabaya 2022</h1>",unsafe_allow_html=True)
+
+
