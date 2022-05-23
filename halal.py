@@ -226,16 +226,9 @@ agraph(nodes, edges, config)
 # FOOTER
 
 st.header("Dipersembahkan oleh")
-st.image("logo.png",width=400)
+st.image("logo.png")
 
 st.markdown("***")
-col5, col6, col7 = st.columns([3,1,3])
-with col5:
-    st.write(' ')
-with col6:
-	st.image(["logosby.png","inovboyo.png"])
-with col7:
-	st.write(' ')
-st.markdown("<h1 style='text-align: center'>INOVBOYO - Lomba Inovasi Kota Surabaya 2022</h1>",unsafe_allow_html=True)
+st.markdown("INOVBOYO - Lomba Inovasi Kota Surabaya 2022")
 
 
