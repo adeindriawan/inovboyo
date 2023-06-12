@@ -2,9 +2,6 @@ import streamlit as st
 import pandas as pd
 import numpy as np
 import plotly.express as px
-import re
-import string
-import requests
 import folium
 from streamlit_agraph import agraph, Node, Edge, Config
 from streamlit_folium import st_folium
@@ -18,7 +15,10 @@ def get_data():
 		return pd.read_csv("data.csv" ,sep='\t')
 
 def get_databotsol():
-	return pd.read_csv("botsolxhalaladded.csv")
+	databotsol = pd.read_csv("botsolxhalaladded.csv")
+	dataabove80 = pd.read_csv("above_80.csv")
+	datamerge = pd.concat([databotsol,dataabove80])
+	return datamerge
 
 def split_query(q):
 	qlist=q.lower().split()
@@ -55,8 +55,6 @@ def get_response(q):
 	return(data)
 
 def get_coordinates(opsi):
-	#botsol_data = get_databotsol()
-	# print(opsi)
 	certified = databotsol.loc[~databotsol['No Sertifikat'].isnull()]
 	uncertified = databotsol.loc[databotsol['No Sertifikat'].isnull()]
 	mapit = folium.Map(location=[-7.277674, 112.694906], zoom_start=12)
@@ -93,14 +91,16 @@ def get_coordinates(opsi):
 				).add_to(mapit)
 	return mapit
 
-st.title("Surabaya Halal Directory")
-st.write('Halo Arek Suroboyo? Apakah anda pecinta kuliner? Pernahkah anda berfikir kuliner yang disajikan sudah tersertifikasi halal? Sebagai seorang muslim memang suatu kebutuhan dan diwajibkan memakanan makanan dan minuman halal, baik dari bahan dan cara pengolahannya. Kalau anda penasaran kuliner yang biasanya anda makan halal atau tidak. Aplikasi ini membantu mengecek sertifikasi halal warung/restaurant/warung/bakery dan kuliner lainnya di Kota Surabaya. Aplikasi ini menggabungkan data google maps dan data SIHALAL BPJPH menggunakan algoritma Jaccard Similarity.')
+st.title("City Halal Directory")
+st.write('Halo masyarakat Jawa Timur! Apakah anda pecinta kuliner? Pernahkah anda berfikir kuliner yang disajikan sudah tersertifikasi halal? Sebagai seorang muslim memang suatu kebutuhan dan diwajibkan memakanan makanan dan minuman halal, baik dari bahan dan cara pengolahannya. Kalau anda penasaran kuliner yang biasanya anda makan halal atau tidak. Aplikasi ini membantu mengecek sertifikasi halal warung/restaurant/warung/bakery dan kuliner lainnya di Kota Surabaya. Aplikasi ini menggabungkan data google maps dan data SIHALAL BPJPH menggunakan algoritma Jaccard Similarity.')
 st.write('Anda dapat melihat source code dan dataset [di sini](https://github.com/adeindriawan/inovboyo)')
-st.write('Data didapatkan dengan melakukan crawling data Google Maps restoran di Surabaya. Data dilakukan cleaning terlebih dahulu dan jumlah data yang siap digunakan sebanyak 1339 restoran di seluruh 31 kecamatan surabaya. Restoran restoran tersebut dikategorikan ke dalam 6 kategori berdasarkan keyword yang digunakan pada saat crawling: Cafe, Restoran, Warung, Bakery, Warung kopi, dan Kopi.')
-st.write('Disclaimer: Beberapa nama warung/restoran yang ditampilkan pada data google maps berbeda dengan data  SIHALAL BPJPH. Hal ini dikarenakan terdapat  warung/restoran menggunakan nama pemilik usaha atau nama PT bukan nama komersil yang biasa ditemukan di google maps')
+st.write('Data didapatkan dengan melakukan crawling data Google Maps restoran di kota Surabaya. Data dilakukan cleaning terlebih dahulu dan jumlah data yang siap digunakan sebanyak 1339 restoran di seluruh 31 kecamatan surabaya. Restoran restoran tersebut dikategorikan ke dalam 6 kategori berdasarkan keyword yang digunakan pada saat crawling: Cafe, Restoran, Warung, Bakery, Warung kopi, dan Kopi.')
+st.write('Disclaimer: Beberapa nama warung/restoran yang ditampilkan pada data google maps berbeda dengan data  SIHALAL BPJPH. Hal ini dikarenakan terdapat warung/restoran menggunakan nama pemilik usaha atau nama PT bukan nama komersil yang biasa ditemukan di google maps')
+st.write("Pendaftaran sertifikasi halal silahkan kunjungi http://halal.its.ac.id/")
+
 # search restoran halal
 
-st.title("Peta Restoran dan Warung Di Surabaya")
+st.title("Peta Restoran dan Warung Di Kota")
 
 select_data = st.radio(
     "Pilih Data yang ingin ditampilkan",
@@ -173,7 +173,7 @@ with col3:
 	st.plotly_chart(figkateg)
 
 with col4:
-	st.header("Wordcloud Kuliner Surabaya")
+	st.header("Wordcloud Kuliner Kota")
 	st.text(f"Kecamatan : {selectkeckategori}")
 	dfkeccopy = datafilter.copy()
 	dfkeccopy['Name'] = dfkeccopy['Name'].str.lower()
@@ -203,7 +203,7 @@ with col4:
 	plt.show()
 	st.pyplot(fig)
 
-st.header("Visualisasi Graph Restoran di Surabaya")
+st.header("Visualisasi Graph Restoran di Kota")
 config = Config(height=600, width=1400, nodeHighlightBehavior=True, highlightColor="#F7A7A6", directed=True,
                   collapsible=True)
 
@@ -230,6 +230,6 @@ st.header("Dipersembahkan oleh")
 st.image("logo.png")
 
 st.markdown("***")
-st.markdown("INOVBOYO - Lomba Inovasi Kota Surabaya 2022")
+st.markdown("Inovasi dan Teknologi (INOTEK AWARD) Jawa Timur")
 
 
